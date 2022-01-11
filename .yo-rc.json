@@ -1,0 +1,12 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "version": "1.11.0",
+    "libraryName": "task-list",
+    "libraryId": "ca46a5b8-7813-4c0c-a07c-d98436f53a6b",
+    "environment": "spo",
+    "packageManager": "npm",
+    "isCreatingSolution": false,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
