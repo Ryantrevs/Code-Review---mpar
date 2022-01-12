@@ -10,6 +10,7 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import * as strings from 'HelloWorldWebPartStrings';
 import HelloWorld from './components/HelloWorld';
 import { IHelloWorldProps } from './components/IHelloWorldProps';
+import { sp } from '@pnp/sp';
 
 export interface IHelloWorldWebPartProps {
   description: string;
@@ -17,11 +18,19 @@ export interface IHelloWorldWebPartProps {
 
 export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorldWebPartProps> {
 
+  protected async onInit(): Promise<void> {
+
+    const _ = await super.onInit();
+    sp.setup(this.context);
+
+  }
+
   public render(): void {
     const element: React.ReactElement<IHelloWorldProps> = React.createElement(
       HelloWorld,
       {
-        description: this.properties.description
+        description: this.properties.description,
+        context: this.context,
       }
     );
 
