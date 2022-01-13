@@ -25,6 +25,7 @@
     "@pnp/graph": "^2.11.0",
     "@pnp/polyfill-ie11": "^2.0.2",
     "@pnp/sp": "^2.3.0",
+    "date-fns": "^2.28.0",
     "office-ui-fabric-react": "6.214.0",
     "react": "16.8.5",
     "react-datepicker": "^4.1.1",

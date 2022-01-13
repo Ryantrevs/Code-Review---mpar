@@ -1,41 +1,30 @@
-import { AddTaskAction, EditTaskAction, GetAllTask, RemoveTaskAction } from "../actions/task.action"
+import { AddTaskAction, EditTaskAction, GetAllTask, RemoveTaskAction, SearchTaskAction } from "../actions/task.action"
 import TaskModel from "../models/task.model";
-import { GetTask, AddTask, RemoveTask, EditTaskService, GetContentLenght } from "../services/task.service"
+import { GetTask, AddTask, RemoveTask, EditTaskService, GetContentLenght, GetFilteredContent } from "../services/task.service"
 
 export const TaskThunk = {
-    GetAllTask: (indexInitial:number) => (dispatch) => {
-        GetTask(indexInitial)
-            .then((response) => {
-                
-                GetContentLenght().then((size)=>{
-                    let array_tmp = new Array<number>();
-                    let page_tmp = indexInitial;
-                    console.log(size/5,"TAMANHO")
-                    if(page_tmp<=0 && size/5>=3){
-                        console.log('entrou no primeiro')
-                        for(let i=2;i<size/5 || i<4;i++)
-                            array_tmp.push(i)
-                    }
-                    else if(page_tmp+1>size/5 && (size/5)>4){
-                        console.log("entrou no meio")
-                        for(let i=(size/5)-3;i<size/5;i++){
-                            console.log(i,"I");
-                            array_tmp.push(i)
-                        }
-                            
-                    }
-                    else{
-                        console.log("entrou no ultimo")
-                        for(let i=page_tmp-1;i<=page_tmp+1;i++)
-                            if(i>0 && i<size/5)
-                                array_tmp.push(i)
-                    }
-                    return dispatch(GetAllTask(response,array_tmp,size/5,indexInitial))})
-                })
-
-                
-            .catch((e)=>{console.log("ERRO VE AQUI",e.message)});
-    },
+    GetAllTask: (indexInitial:number,userId:number) => (dispatch) => {
+        GetTask(userId)
+            .then((response)=>{
+                const size = Math.ceil(response.length/5);
+                let array_tmp = new Array<number>();
+                if(indexInitial<=0){
+                    for(let i=indexInitial;i-4 || i<size;i++)
+                        if(i>1)
+                            array_tmp.push(i);
+                }
+                else if(indexInitial-1>=2 && indexInitial+1<=size){
+                    console.log("entrou no meio")
+                    for(let i=indexInitial-1;i<indexInitial+1;i++)
+                        array_tmp.push(i);
+                }
+                else{
+                    console.log("entrou no ultimo")
+                    for(let i=size;i>=3 || i>1;i--)
+                        array_tmp.unshift(i);
+                }
+                return dispatch(GetAllTask(response,array_tmp,size/5,indexInitial,response.slice(indexInitial*5,(indexInitial*5)+5)));
+        })},
     AddTaskThunk: (task:TaskModel) => (dispatch) => {
         console.log("asbdkjbaskdkjsab")
         AddTask(task).then((value)=>{
@@ -51,7 +40,7 @@ export const TaskThunk = {
         EditTaskService(task).then(()=>{
             dispatch(EditTaskAction(task));
         })
-    }
+    },
 
 
 }

@@ -1,15 +1,31 @@
-import { Dialog } from 'office-ui-fabric-react';
+import { DefaultButton, Dialog, DialogFooter, PrimaryButton } from 'office-ui-fabric-react';
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { NewMessageDialogAction } from '../../actions/dialog.action';
 
 export function DialogMessage() {
 
-  const state = useSelector((state:any) => state.task)
+  const dialog = useSelector((state:any) => state.dialog);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("mudou dialog",dialog)
+  }, [dialog])
+
+  function DismissDialog(){
+    dispatch(NewMessageDialogAction('','',true));
+  }
     return (
         <>
           <Dialog
-          hidden={true}>
-
+            hidden={dialog.showDialog}
+            onDismiss={DismissDialog}
+            dialogContentProps={dialog}>
+            <DialogFooter>
+            <DefaultButton text="Fechar" onClick={DismissDialog} />
+          </DialogFooter>
           </Dialog>
         </>
     )

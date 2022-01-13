@@ -5,6 +5,10 @@ export const ButtonsContainer = styled.div`
     width:89vw;
     height:15vh;
     align-items:center;
+    justify-content:space-between;
+    background:#F0F0F0;
+    border-radius:0.7em;
+    padding: 0 2vw;
 `
 
 export const Button = styled.button`

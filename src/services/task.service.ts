@@ -6,15 +6,9 @@ import TaskModel from "../models/task.model";
 import { IWebEnsureUserResult } from "@pnp/sp/site-users";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 
-export function GetTask(initial:number):Promise<Array<TaskModel>>{
-    return new Promise((resolve,reject)=>{
-        GetUserLogged()
-            .then((response)=>{
-                return resolve(sp.web.lists.getByTitle("Lista de Tarefas").items.filter(`OwnerId eq '${response.Id}'`).skip(initial*5).top(5).get<Array<TaskModel>>());
-            })
-    })
-   
-    
+export function GetTask(userId:number):Promise<Array<TaskModel>>{
+    //return sp.web.lists.getByTitle("Lista de Tarefas").items.filter(`OwnerId eq '${userId}'`).skip(initial*5).top(5).get<Array<TaskModel>>(); 
+    return sp.web.lists.getByTitle("Lista de Tarefas").items.filter(`OwnerId eq '${userId}'`).get<Array<TaskModel>>();
 }
 
 export function AddTask(task:TaskModel):Promise<TaskModel>{
@@ -63,6 +57,10 @@ export function GetContentLenght():Promise<number>{
     
 }
 
+export function GetFilteredContent(contentToSearch:string):Promise<Array<TaskModel>>{
+    return sp.web.lists.getByTitle("Lista de Tarefas").items.filter(`substringof('${contentToSearch}',Title)`).get<Array<TaskModel>>();
+}
+
 export function RemoveTask(id:number):Promise<void>{
     console.log("ID",id);
     return new Promise((resolve,reject)=>{
@@ -81,7 +79,8 @@ export function EditTaskService(task:TaskModel):Promise<void>{
         sp.web.lists.getByTitle("Lista de Tarefas").items.getById(task.ID).update({
             Title: task.Title,
             Description: task.Description,
-            Initial: task.Initial
+            Initial: task.Initial,
+            FinalDate:task.FinalDate
         }).then(()=>{
             return resolve();
         }).catch((e)=>{

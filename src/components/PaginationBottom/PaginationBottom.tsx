@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { TaskThunk } from '../../thunks/TaskThunk';
 import { HomePaginationContainer, HomePaginationItem } from './PaginationBottom.elements';
 
-function PaginationBottom() {
+function PaginationBottom({userId}) {
 
     const taskOpt = useSelector((state:any) => state.task)
     const dispatch = useDispatch()
 
     function ChangePage(page:number){
         console.log("change page")
-        dispatch(TaskThunk.GetAllTask(page-1));
+        dispatch(TaskThunk.GetAllTask(page-1,userId));
     }
 
     useEffect(() => {
@@ -22,7 +22,7 @@ function PaginationBottom() {
     
     return (
         <HomePaginationContainer>
-                {taskOpt.pagination<= 0 ? <HomePaginationItem disabled style={{width:'70px'}}>Primeira</HomePaginationItem>:<HomePaginationItem style={{width:'70px'}} onClick={((event)=> ChangePage(0))}>Primeira</HomePaginationItem>}
+                {taskOpt.pagination<= 0 ? <></>:<HomePaginationItem style={{width:'70px'}} onClick={((event)=> ChangePage(1))}>Primeira</HomePaginationItem>}
                 {
                     taskOpt.paginationArray.map((number,index)=>{
                         return(
@@ -30,7 +30,7 @@ function PaginationBottom() {
                         )
                     })
                 }
-                {taskOpt.size/5 > 0 ? <HomePaginationItem disabled style={{width:'70px'}}>última</HomePaginationItem>:<HomePaginationItem style={{width:'70px'}} onClick={((event)=> ChangePage(taskOpt.size/5))}>Ultima</HomePaginationItem>}
+                {taskOpt.size/5 > 0 || taskOpt.size==0 ? <></>:<HomePaginationItem style={{width:'70px'}} onClick={((event)=> ChangePage(taskOpt.size/5))}>Ultima</HomePaginationItem>}
         </HomePaginationContainer>
     )
 }

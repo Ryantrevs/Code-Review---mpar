@@ -9,29 +9,31 @@ export const ListItem = styled.div`
     width:100%;
     min-height:5vh;
     display:flex;
-    &:not(:last-child){
+    align-items:center;
+    &:not(:first-child){
         border-style:none none solid none;
         border-width:1px;
-        border-color:#000;
+        border-color:#58396C;
     }
 `
 
 export const ListInfoSection = styled.div`
     width:25%;
-    height:100%;
+    min-height:100%;
 `
 
 export const ListInfoLabel = styled.div`
-    height:30%;
+    height:100%;
     padding:5% 0 0 0;
     width:100%;
     font-size:12pt;
     font-weight:bold;
     text-align:center;
+    color:#58396C;
 `
 
 export const ListInfoValue = styled.div`
-    height:70%;
+    height:100%;
     width:100%;
     font-size:12pt;
     display:flex;
@@ -51,6 +53,6 @@ export const ButtonIcon = styled.button`
     border:none;
     cursor:pointer;
     &:hover{
-        background:#aeaeae;
+        background:#F0F0F0;
     }
 `

@@ -8,6 +8,7 @@ export default class TaskListOptions{
     public paginationArray:Array<number>;
     public size:number;
     public userLogged:number;
+    public ListTaskPresent:Array<TaskModel>;
 
     constructor(){
         this.ListTask = new Array<TaskModel>();
@@ -17,6 +18,8 @@ export default class TaskListOptions{
         this.paginationArray = new Array<number>();
         this.size = 0;
         this.userLogged = -1;
+        this.ListTaskPresent = new Array<TaskModel>();
+        
     }
 
     

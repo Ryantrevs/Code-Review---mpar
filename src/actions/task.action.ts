@@ -15,15 +15,21 @@ export const RemoveTaskAction = (id:number) => ({
     payload : id
 });
 
-export const GetAllTask = (list:Array<TaskModel>,arrayPagination:Array<number>,size:number,pagination:number) => ({
+export const GetAllTask = (list:Array<TaskModel>,arrayPagination:Array<number>,size:number,pagination:number,present:Array<TaskModel>) => ({
     type: 'get-all-task',
     payload: {
         content:list,
         pagination:arrayPagination,
         size:size,
-        actualPage:pagination
+        actualPage:pagination,
+        tasksPresent:present
     }
 });
+
+export const SearchTaskAction = (value:string) => ({
+    type: "SearchTask",
+    payload:value
+})
 
 export const ChangeShowModalADD = (value:boolean, task?:TaskModel) => ({
     type: 'ModalADD',

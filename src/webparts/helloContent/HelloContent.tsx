@@ -1,39 +1,67 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ChangeShowModalADD } from '../../actions/task.action';
-import AddTaskModal from '../../components/AddTaskModal';
-import ListVisualization from '../../components/ListVisualization';
-import PaginationBottom from '../../components/PaginationBottom/PaginationBottom';
-import TaskListOptions from '../../models/task_list_options';
-import { TaskThunk } from '../../thunks/TaskThunk';
-import { Button, ButtonsContainer } from '../helloWorld/components/HelloWorld_elements';
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ChangeShowModalADD, SearchTaskAction } from "../../actions/task.action";
+import AddTaskModal from "../../components/AddTaskModal";
+import ListVisualization from "../../components/ListVisualization";
+import PaginationBottom from "../../components/PaginationBottom/PaginationBottom";
+import { TaskThunk } from "../../thunks/TaskThunk";
+import {
+  Button,
+  ButtonsContainer,
+} from "../helloWorld/components/HelloWorld_elements";
+import DialogMessage from "../../components/Dialog";
+import { UserThunk } from "../../thunks/UserThunk";
+import { SearchBox } from "office-ui-fabric-react";
 
 export function HelloContent() {
+  
+  const dispatch = useDispatch();
 
-    const taskList = useSelector((state:any) => {return state.task;})
+  const taskList = useSelector((state: any) => {
+    return state.task;
+  });
 
-    const dispatch = useDispatch();
+  const userState = useSelector((state:any) => state.user);
 
-    useEffect(()=>{
-      dispatch(TaskThunk.GetAllTask(taskList.pagination));
-    },[])
+  useEffect(()=>{
+    if(userState=>0)
+      dispatch(TaskThunk.GetAllTask(taskList.pagination,userState));
+  },[userState]);
 
-    useEffect(()=>{
-      console.log('mudou',taskList)
-    },[taskList])
-
+  useEffect(() => {
+    dispatch(UserThunk.GetUserLogged());
     
-    return (
-        <>
-            <AddTaskModal showModal={taskList.ShowAddModal}/>
-            <ButtonsContainer>
-            <Button onClick={(event)=>{event.preventDefault(); dispatch(ChangeShowModalADD(true));}}>Adicionar</Button>
-            </ButtonsContainer>
-            <ListVisualization ListTasks={taskList.ListTask}/>
-            <PaginationBottom/>
-        </>
-    )
+  }, []);
+
+  useEffect(() => {
+    console.log("mudou", taskList);
+  }, [taskList]);
+
+  return (
+    <>
+      <DialogMessage />
+      <AddTaskModal showModal={taskList.ShowAddModal} />
+      <ButtonsContainer>
+        <Button
+          onClick={(event) => {
+            event.preventDefault();
+            dispatch(ChangeShowModalADD(true));
+          }}
+        >
+          Adicionar
+        </Button>
+        <SearchBox
+          placeholder="buscar tarefa"
+          onSearch={(value: string) => {
+            dispatch(SearchTaskAction(value));
+          }}
+        />
+      </ButtonsContainer>
+      <ListVisualization ListTasks={taskList.ListTaskPresent} />
+      <PaginationBottom userId={userState}/>
+    </>
+  );
 }
 
-export default HelloContent
+export default HelloContent;
