@@ -24,18 +24,37 @@ export function HelloContent() {
 
   const userState = useSelector((state:any) => state.user);
 
+  useEffect(() => {
+    dispatch(UserThunk.GetUserLogged());
+    
+  }, []);
+
   useEffect(()=>{
     if(userState=>0)
       dispatch(TaskThunk.GetAllTask(taskList.pagination,userState));
   },[userState]);
 
   useEffect(() => {
-    dispatch(UserThunk.GetUserLogged());
-    
-  }, []);
-
-  useEffect(() => {
-    console.log("mudou", taskList);
+    if(taskList.ListTask.length>0){
+      console.log("naslkdnalsnldsna")
+      for(let i=0;i<taskList.ListTask.length;i++){
+        let tempTask = taskList.ListTask[i];
+        console.log("INDEX - "+i, "STATUS - " + tempTask.Status)
+        if(tempTask.Status==undefined){
+          tempTask.Status = "Em Andamento";
+          dispatch(TaskThunk.EditTask(tempTask));
+        }
+        else if(tempTask.Status == "Concluída" && ((tempTask.Deadline != undefined && tempTask.FinalDate) && new Date(tempTask.FinalDate).getTime()>new Date(tempTask.Deadline).getTime())){
+          tempTask.Status = "Entregue com atraso";
+          dispatch(TaskThunk.EditTask(tempTask));
+        }
+        else if(tempTask.Status == "Em Andamento" && new Date(tempTask.FinalDate).getTime()<new Date().getTime()){
+          tempTask.Status = "Atrasada";
+          dispatch(TaskThunk.EditTask(tempTask));
+        }
+        
+      }
+    }
   }, [taskList]);
 
   return (

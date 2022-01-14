@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const ButtonsContainer = styled.div`
     display:flex;
-    width:89vw;
+    width:92vw;
     height:15vh;
     align-items:center;
     justify-content:space-between;

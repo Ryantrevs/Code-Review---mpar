@@ -1,3 +1,4 @@
+import TaskModel from "../models/task.model";
 import TaskListOptions from "../models/task_list_options";
 
 
@@ -9,7 +10,8 @@ export const TaskReducer = (state:TaskListOptions = initialState,action:any) => 
         case 'get-all-task':
             return {...state,ListTask:action.payload.content,paginationArray:action.payload.pagination,size:action.payload.size,pagination:action.payload.actualPage,ListTaskPresent:action.payload.tasksPresent};
         case 'add-task':
-            console.log("entrou aqui")
+            if(state.ListTaskPresent.length<5)
+                state = {...state,ListTaskPresent:[...state.ListTaskPresent,action.payload]}
             return {...state,ListTask:[...state.ListTask,action.payload]};
         case 'ModalADD':
             return {...state,ShowAddModal:action.payload.showModal,EditTask:action.payload.taskChange};
@@ -18,7 +20,11 @@ export const TaskReducer = (state:TaskListOptions = initialState,action:any) => 
                 return element.ID != action.payload;
             });
 
-            return {...state,ListTask:arrayTemp};
+            let listTaskPresentTemp = state.ListTaskPresent.filter(function(element:TaskModel){
+                return element.ID != action.payload;
+            })
+
+            return {...state,ListTask:arrayTemp,ListTaskPresent:listTaskPresentTemp};
         case 'edit-task':
             let listElement = state.ListTaskPresent.map((element,index)=>{
                 if(element.ID == action.payload.ID)
@@ -26,6 +32,8 @@ export const TaskReducer = (state:TaskListOptions = initialState,action:any) => 
                 else
                     return element;
             });
+
+            
 
             return {...state,ListTaskPresent:listElement,EditTask:undefined,ShowAddModal:false};
         case 'SearchTask':

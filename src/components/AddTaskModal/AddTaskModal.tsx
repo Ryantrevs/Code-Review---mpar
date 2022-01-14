@@ -20,7 +20,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { ChangeShowModalADD } from "../../actions/task.action";
 import { TaskThunk } from "../../thunks/TaskThunk";
 import { PeoplePicker } from "../PeoplePicker/PeoplePicker";
-import { ComboBox, IComboBoxOption, IPersonaProps, IPersonaSharedProps } from "office-ui-fabric-react";
+import {
+  ComboBox,
+  IComboBoxOption,
+  IComboBoxProps,
+  IComboBoxStyles,
+  IPersonaProps,
+  IPersonaSharedProps,
+} from "office-ui-fabric-react";
 import { NewMessageDialogAction } from "../../actions/dialog.action";
 
 export function AddTaskModal({ showModal }) {
@@ -32,14 +39,20 @@ export function AddTaskModal({ showModal }) {
   const TaskOptions = useSelector((state: any) => state.task);
 
   const options: IComboBoxOption[] = [
-    { key: 'Em Andamento', text: 'Em Andamento' },
-    { key: 'Concluída', text: 'Concluída' },
+    { key: "Em Andamento", text: "Em Andamento" },
+    { key: "Concluída", text: "Concluída" },
   ];
+  const comboBoxStyles: Partial<IComboBoxStyles> = { root: { maxWidth: 300,zIndex:1} };
+  const onChange: IComboBoxProps["onChange"] = (event, option) => {
+    console.log("Opção", option);
+    setTask({ ...task, Status: option.text });
+  };
 
   useEffect(() => {
     if (TaskOptions.EditTask != undefined) {
       setTask(TaskOptions.EditTask);
       setShouldEdit(true);
+      console.log(TaskOptions.EditTask , "ESSA AQUI")
     }
   }, [TaskOptions]);
 
@@ -89,6 +102,15 @@ export function AddTaskModal({ showModal }) {
         )
       );
       return false;
+    } else if (task.Deadline == undefined) {
+      if (shouldEdit == false)
+        setTask({ ...task, Deadline: new Date().toDateString() });
+      else{
+        dispatch(
+          NewMessageDialogAction("Ops", "Defina uma data para o prazo.", false)
+        );
+        return false;
+      }
     }
 
     return true;
@@ -164,11 +186,14 @@ export function AddTaskModal({ showModal }) {
         </InputHolder>
         <InputHolder>
           <ComboBox
-            defaultSelectedKey="Em Andamento"
-            label="Andamento de Tarefa"
+            defaultSelectedKey={task.Status}
+            label="Status"
             options={options}
             calloutProps={{ doNotLayer: true }}
-            onChange={(value)=>{console.log("MUDOU",value.target.value)}}
+            onChange={onChange}
+            value={task.Status}
+            styles={comboBoxStyles}
+            style={{zIndex:1}}
           />
         </InputHolder>
         <InputHolder>
@@ -177,12 +202,28 @@ export function AddTaskModal({ showModal }) {
             isRequired={true}
             placeholder="Selecione uma data..."
             ariaLabel="Selecione a data"
+            value={new Date(task.FinalDate)}
             minDate={
               task.Initial != undefined ? new Date(task.Initial) : new Date()
             }
+            maxDate={new Date()}
             disabled={!shouldEdit}
             onSelectDate={(event: any) => {
               setTask({ ...task, FinalDate: event });
+            }}
+          />
+        </InputHolder>
+        <InputHolder>
+          <DatePicker
+            label="Prazo"
+            isRequired={true}
+            placeholder="Selecione uma data..."
+            ariaLabel="Selecione a data"
+            minDate={new Date(task.Initial)}
+            value={new Date(task.Deadline)}
+            disabled={shouldEdit}
+            onSelectDate={(event: any) => {
+              setTask({ ...task, Deadline: event });
             }}
           />
         </InputHolder>

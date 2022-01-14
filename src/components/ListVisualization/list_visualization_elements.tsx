@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 
 export const ListContainer = styled.section`
-    width:89vw;
+    min-width:89vw;
     min-height:15vh;
+    @media(max-width:660px){
+        overflow-x:scroll;
+    }
 `
 
 export const ListItem = styled.div`
-    width:100%;
+    min-width:100vw;
     min-height:5vh;
     display:flex;
     align-items:center;
@@ -15,11 +18,19 @@ export const ListItem = styled.div`
         border-width:1px;
         border-color:#58396C;
     }
+    @media(max-width:660px){
+        min-width:210vw;
+    }
 `
 
 export const ListInfoSection = styled.div`
-    width:25%;
+    width:15%;
     min-height:100%;
+    @media(max-width:660px){
+        min-width:20vw;
+        padding:0 5vw;
+    }
+    
 `
 
 export const ListInfoLabel = styled.div`
@@ -30,6 +41,11 @@ export const ListInfoLabel = styled.div`
     font-weight:bold;
     text-align:center;
     color:#58396C;
+    word-break:break-word;
+    @media(max-width:660px){
+        min-width:20vw;
+        padding:0 5vw;
+    }
 `
 
 export const ListInfoValue = styled.div`
@@ -39,13 +55,22 @@ export const ListInfoValue = styled.div`
     display:flex;
     justify-content:space-around;
     text-align:center;
+    word-break:break-word;
+    @media(max-width:660px){
+        min-width:20vw;
+        padding:0 5vw;
+    }
 `
 export const ListButtonsHolder = styled.div`
     display:flex;
-    width:25%;
+    width:15%;
     height:10vh;
     align-items:center;
     justify-content:space-evenly;
+    @media(max-width:660px){
+        min-width:20vw;
+        padding:0 8vw 0 5vw;
+    }
 `
 
 export const ButtonIcon = styled.button`

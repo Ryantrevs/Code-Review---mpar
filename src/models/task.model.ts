@@ -12,4 +12,5 @@ export default class TaskModel{
     public ID:number;
     public People:Array<string>
     public Status:string;
+    public Deadline:string;
 }

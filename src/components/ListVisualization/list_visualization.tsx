@@ -22,6 +22,7 @@ import { formatRelative, subDays,formatDistance } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export function ListVisualization({ ListTasks }) {
+  
   const dispatch = useDispatch();
 
   return (
@@ -38,6 +39,9 @@ export function ListVisualization({ ListTasks }) {
         </ListInfoSection>
         <ListInfoSection>
           <ListInfoLabel>Data de Finalização</ListInfoLabel>
+        </ListInfoSection>
+        <ListInfoSection>
+          <ListInfoLabel>Prazo</ListInfoLabel>
         </ListInfoSection>
         <ListInfoSection>
           <ListInfoLabel>Status</ListInfoLabel>
@@ -69,9 +73,16 @@ export function ListVisualization({ ListTasks }) {
                   : ""}
               </ListInfoValue>
             </ListInfoSection>
+            <ListInfoSection>
+              <ListInfoValue>
+              {element.Deadline != undefined
+                  ? formatDistance(new Date(element.Deadline), new Date(), { addSuffix: true,locale:ptBR })
+                  : ""}
+              </ListInfoValue>
+            </ListInfoSection>
             <ListInfoSection style={{fontWeight:"bold"}}>
               <ListInfoValue>
-                {element.Status != undefined? element.Status : "Em andamento"}
+                {element.Status != undefined? element.Status : ""}
               </ListInfoValue>
             </ListInfoSection>
             <ListButtonsHolder>

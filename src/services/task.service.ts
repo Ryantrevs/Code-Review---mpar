@@ -21,7 +21,9 @@ export function AddTask(task:TaskModel):Promise<TaskModel>{
             Initial:task.Initial,
             OwnerId: {
                 results:users.map((element,index)=>element.data.Id)
-            }
+            },
+            Status:"Em andamento",
+            Deadline:task.Deadline
         }).then((value)=>{
             console.log("resultado da adição",value);
             return resolve(value.data);
@@ -80,7 +82,9 @@ export function EditTaskService(task:TaskModel):Promise<void>{
             Title: task.Title,
             Description: task.Description,
             Initial: task.Initial,
-            FinalDate:task.FinalDate
+            FinalDate:task.FinalDate,
+            Status:task.Status,
+            Deadline:task.Deadline
         }).then(()=>{
             return resolve();
         }).catch((e)=>{

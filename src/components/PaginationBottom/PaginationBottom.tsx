@@ -15,8 +15,10 @@ function PaginationBottom({userId}) {
     }
 
     useEffect(() => {
-        console.log("CONFIRMAÇÃO ", taskOpt.size/5 <= 0)
-        console.log("TAMANHO ", taskOpt.size)
+        console.log("CONFIRMAÇÃO ", taskOpt.size > 0 && taskOpt.pagination!=taskOpt.size-1);
+        console.log("TAMANHO ", taskOpt.size);
+        console.log("array da paginacao",taskOpt.paginationArray);
+        console.log("PAGINA ATUAL CONFIRMAÇÃO ",taskOpt.pagination);
     }, [taskOpt])
 
     
@@ -30,7 +32,7 @@ function PaginationBottom({userId}) {
                         )
                     })
                 }
-                {taskOpt.size/5 > 0 || taskOpt.size==0 ? <></>:<HomePaginationItem style={{width:'70px'}} onClick={((event)=> ChangePage(taskOpt.size/5))}>Ultima</HomePaginationItem>}
+                {taskOpt.size > 0 && taskOpt.pagination!=taskOpt.size -1 ? <HomePaginationItem style={{width:'70px'}} onClick={((event)=> ChangePage(taskOpt.size))}>Ultima</HomePaginationItem>:<></>}
         </HomePaginationContainer>
     )
 }
